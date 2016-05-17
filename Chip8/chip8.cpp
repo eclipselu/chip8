@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <map>
 #include "chip8.h"
 
 using namespace std;
@@ -19,6 +20,12 @@ void chip8::initialize()
 	memset(this->memory, 0, sizeof(this->memory));
 	memset(this->V, 0, sizeof(this->V));
 	memset(this->gfx, 0, sizeof(this->gfx));
+
+	// initialize opcode map
+	for (unsigned char i = 0; i < 0x0F; i += 1)
+	{
+		opmap[i] = &chip8::op_null;
+	}
 }
 
 void chip8::loadGame(string filename)
@@ -49,11 +56,6 @@ void chip8::loadGame(string filename)
 	for (size_t i = 0; i < file_size; i++)
 	{
 		this->memory[i + rom_offset] = buffer[i];
-		if (i % 2)
-		{
-			unsigned short opcode = buffer[i - 1] << 8 | buffer[i];
-			cout << std::hex << opcode << endl;
-		}
 	}
 
 	this->pc = rom_offset;
@@ -61,14 +63,26 @@ void chip8::loadGame(string filename)
 	fs.close();
 }
 
+void chip8::fetch()
+{
+	this->opcode = memory[this->pc] << 8 | memory[this->pc + 1];
+	this->pc += 2;
+}
+
 void chip8::emulateCycle()
 {
 	// fetch opcode
-	this->opcode = memory[this->pc] << 8 | memory[this->pc + 1];
-
-	// decode opcode
+	fetch();
 
 	// execute opcode
+	cpu_opfunc func = this->opmap[(this->opcode & 0xF000) >> 12];
+	(this->*func)();
 
 	// update timers
+}
+
+void chip8::op_null()
+{
+	// do nothing
+	cout << "this is a null op" << endl;
 }

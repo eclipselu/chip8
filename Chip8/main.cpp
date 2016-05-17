@@ -3,15 +3,16 @@
 
 using namespace std;
 
-int main(int argc, char **argv) {
-
-	// emulation loop
-	/*while (true) {
-
-	}*/
+int main(int argc, char **argv)
+{
 
 	chip8 game;
 	game.initialize();
 	game.loadGame(argv[1]);
 
+	// emulation loop
+	while (true) 
+	{
+		game.emulateCycle();
+	}
 }

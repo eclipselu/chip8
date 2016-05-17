@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <map>
 
 using namespace std;
 
@@ -8,12 +9,17 @@ const unsigned int max_memory = 4096;
 
 class chip8
 {
+typedef void (chip8::*cpu_opfunc)();  // function pointer to class chip8's member function
+typedef map<unsigned char, cpu_opfunc> opfunc_map;  // int -> cpu_opfunc
+
 public:
 	chip8();
 	~chip8();
 	void initialize();
 	void loadGame(string filename);
+	void fetch();
 	void emulateCycle();
+	void op_null();
 
 private:
 	unsigned short opcode;
@@ -30,5 +36,6 @@ private:
 	unsigned short stack[16];       // stack
 	unsigned short sp;              // stack pointer
 
+	opfunc_map opmap;
 };
 
