@@ -3,6 +3,9 @@
 
 using namespace std;
 
+const unsigned int rom_offset = 512;
+const unsigned int max_memory = 4096;
+
 class chip8
 {
 public:
@@ -14,7 +17,7 @@ public:
 
 private:
 	unsigned short opcode;
-	unsigned char memory[4096];
+	unsigned char memory[max_memory];
 	unsigned char V[16];			// registers
 	unsigned short I;				// index register
 	unsigned short pc;				// program counter
