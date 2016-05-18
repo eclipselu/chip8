@@ -243,3 +243,8 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+Chip8/CMakeCache.txt
+Chip8/CMakeFiles
+Chip8/Makefile
+Chip8/cmake_install.cmake

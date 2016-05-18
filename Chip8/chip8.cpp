@@ -22,7 +22,7 @@ void chip8::initialize()
 	memset(this->gfx, 0, sizeof(this->gfx));
 
 	// initialize opcode map
-	for (unsigned char i = 0; i < 0x0F; i += 1)
+	for (unsigned char i = 0; i <= 0x0F; i += 1)
 	{
 		opmap[i] = &chip8::op_null;
 	}
@@ -36,7 +36,7 @@ void chip8::loadGame(string filename)
 
 	fs.open(filename, fstream::in | fstream::binary);
 
-	if (!fs) 
+	if (!fs)
 	{
 		cerr << "no such rom file" << endl;
 		exit(1);
@@ -65,6 +65,9 @@ void chip8::loadGame(string filename)
 
 void chip8::fetch()
 {
+	if (this->pc + 1 >= max_memory)
+        exit(0);
+
 	this->opcode = memory[this->pc] << 8 | memory[this->pc + 1];
 	this->pc += 2;
 }
