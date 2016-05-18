@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-
+	freopen("output.txt", "wb", stdout);
 	chip8 game;
 	game.initialize();
     if (argc < 2)

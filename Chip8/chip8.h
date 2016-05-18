@@ -20,6 +20,16 @@ public:
 	void fetch();
 	void emulateCycle();
 	void op_null();
+	void op_0();
+	void op_1();
+	void op_2();
+	void op_3();
+	void op_4();
+	void op_5();
+	void op_6();
+	void op_7();
+	void op_8();
+	void op_9();
 
 private:
 	unsigned short opcode;
