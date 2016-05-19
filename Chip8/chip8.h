@@ -30,6 +30,10 @@ public:
 	void op_7();
 	void op_8();
 	void op_9();
+    void op_a();
+    void op_b();
+    void op_c();
+    void op_d();
 
 private:
 	unsigned short opcode;

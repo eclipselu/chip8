@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include <map>
+#include <cstdlib>
 #include "chip8.h"
 
 using namespace std;
@@ -17,6 +18,8 @@ chip8::~chip8()
 
 void chip8::initialize()
 {
+    srand(time(0));
+
 	memset(memory, 0, sizeof(memory));
 	memset(V, 0, sizeof(V));
 	memset(gfx, 0, sizeof(gfx));
@@ -207,18 +210,37 @@ void chip8::op_8()
 	case 0x2:
 		// vx = vx and vy
 		V[x] = V[x] & V[y];
+		break;
 	case 0x3:
 		// vx = vx xor vy
 		V[x] = V[x] ^ V[y];
+		break;
 	case 0x4:
 		// vx = vx + vy
 		int tmp = V[x] + V[y];
 		V[0xF] = tmp > 255 ? 1 : 0;
 		V[x] = tmp & 0xF;
+		break;
 	case 0x5:
 		// vx = vx - vy
 		V[0xF] = V[x] > V[y] ? 1 : 0;
 		V[x] = V[x] - V[y];
+		break;
+	case 0x6:
+		// vx = vx shr 1
+		V[0xF] = V[x] & 0x1;
+		V[x] = V[x] >> 1;
+		break;
+	case 0x7:
+		V[0xF] = V[x] < V[y] ? 1 : 0;
+		V[x] = V[x] - V[y];
+		break;
+	case 0xE:
+		V[0xF] = V[x] & 0x1;
+		V[x] = V[x] << 1;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -229,5 +251,36 @@ void chip8::op_9()
 	int y = (opcode & 0x00F0) >> 4;
 	if (V[x] == V[y])
 		pc += 2;
+}
+
+// annn
+void chip8::op_a()
+{
+	int val = opcode & 0xFFF;
+	I = val;
+}
+
+// bnnn
+void chip8::op_b()
+{
+    int addr = opcode & 0xFFF;
+    pc = V[0] + addr;
+}
+
+// cxkk
+void chip8::op_c()
+{
+    int x = (opcode & 0x0F00) >> 8;
+    char r = rand() % 256;
+    V[x] = V[x] & r;
+}
+
+// dxyn
+void chip8::op_d()
+{
+    // draw
+    int x = (opcode & 0x0F00) >> 8;
+    int y = (opcode & 0x00F0) >> 4;
+    int n = opcode & 0xF;
 }
 
