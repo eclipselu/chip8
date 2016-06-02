@@ -6,6 +6,8 @@ using namespace std;
 
 const unsigned int rom_offset = 512;
 const unsigned int max_memory = 4096;
+const unsigned int max_width = 64;
+const unsigned int max_height = 32;
 
 class chip8
 {
@@ -34,6 +36,11 @@ public:
     void op_b();
     void op_c();
     void op_d();
+	void op_e();
+	void op_f();
+	void convert_to_pixels(char *pixels);
+
+	bool drawFlag;
 
 private:
 	unsigned short opcode;
@@ -41,14 +48,13 @@ private:
 	unsigned char V[16];			// registers
 	unsigned short I;				// index register
 	unsigned short pc;				// program counter
-	unsigned char gfx[64 * 32];
 	unsigned char delay_timer;
 	unsigned char sound_timer;
-	bool drawFlag;
 	unsigned char key[16];
 
 	unsigned short stack[16];       // stack
 	unsigned short sp;              // stack pointer
+	unsigned char gfx[max_width * max_height];
 
 	opfunc_map opmap;
 };
